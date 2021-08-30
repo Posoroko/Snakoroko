@@ -42,10 +42,12 @@ body{
     position: absolute;
 }
 #popUpStart{
-    display: flex;
+    /*display: flex;*/
+    visibility: visible;
 }
 #popUpEnd{
-    display: none;
+    /*display: none;*/
+    visibility: hidden;
 }
 .message{
     color: var(--light);
