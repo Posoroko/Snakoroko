@@ -1,0 +1,76 @@
+/*police principale*/
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', cursive;
+}
+
+:root {
+    --light: #FBF263;
+    --lightMid: #A6B63D;
+    --darkMid: #53702F;
+    --dark: #263423;
+}
+body{
+
+    max-width: 100vw;
+    height: 100vh;
+    padding: 3vh;
+    background-color: var(--dark);
+    display: grid;
+    place-items: center;
+}
+.gameBoardBox{
+    background-color: var(--lightMid);
+    display: grid;
+    place-items: center;
+}
+.gameBoard{
+    width: 704px;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+.popUp{
+    background-color: var(--dark);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+#popUpStart{
+    display: flex;
+}
+#popUpEnd{
+    display: none;
+}
+.message{
+    color: var(--light);
+}
+.tile{
+    width: 32px;
+    aspect-ratio: 1/1;
+    background-size: cover;
+}
+.wall{
+    background-image: url("images/wall.png");
+}
+.empty{
+    background-color: var(--lightMid);
+    background-image: url("images/empty.png");
+}
+.head{
+    background-image: url('images/head.png');
+}
+.body{
+    background-image: url('images/body.png');
+}
+.tail{
+    background-image: url('images/tail.png');
+}
+.food{
+    background-image: url('images/food.png');
+}

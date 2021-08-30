@@ -1,0 +1,94 @@
+const startPosition = 230;
+const startDirection = 1;
+let snake = [230, 252, 274];
+
+const food = ' ';
+const wall = '@';
+const head = ' ';
+const body = ' ';
+const tail = ' ';
+
+
+  function foodPos(min, max) {
+    let pos = undefined;
+    do{
+      pos = Math.floor(Math.random() * (max - min)) + min;
+    } while(pos % 22 === 0 || pos % 22 === 21)
+    return pos
+  
+  }
+
+
+
+let makeBoard = function(){
+    let arr = [];
+    for(let i = 0; i < 484; i++) {
+        arr.push(i);
+    }
+    return arr
+}
+
+let gameBoard = makeBoard();
+
+let renderBoard = () => {
+  let arr = [];
+  for(let i = 0; i < gameBoard.length; i++ ){
+    if(gameBoard[i] < 22 || gameBoard[i] > 461 ){
+      arr.push(wall);
+    } else if ( gameBoard[i] % 22 === 0 || gameBoard[i] % 22 === 21 ){
+      arr.push(wall);
+    } else{
+      arr.push(' ');
+    }
+ 
+  }
+  return arr;
+}
+let renderedBoard = renderBoard().join('');
+
+function renderSnakeInBoard(renderedBoard) {
+  let finalBoard = [...renderedBoard];
+  renderedBoard[foodPos] = food;
+  for(let i = 0; i < snake.length; i++){
+    if(i === 0){
+      finalBoard[snake[0]] = head;
+    }else if(i > 0 || i < snake.length - 1){
+      finalBoard[snake[i]] = body;
+    }else if(i === snake.length - 1){
+      finalBoard[snake[i]] = tail;
+    }
+    
+  }
+  return finalBoard.join('');
+}
+console.log(renderSnakeInBoard(renderedBoard))
+
+
+
+
+  
+
+
+for(let i = 0; i < 484; i++) {
+        if(i < 22 || i > 460 || i % 22 == 0 || i % 22 == 21){
+            let newDiv = document.createElement('div');
+            newDiv.classList.add('wall');
+            gameBoard_div.appendChild(newDiv);
+        } else {
+            let newDiv = document.createElement('div');
+            newDiv.classList.add('empty');
+            gameBoard_div.appendChild(newDiv);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
