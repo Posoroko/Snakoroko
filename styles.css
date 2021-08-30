@@ -73,6 +73,15 @@ body{
 .tail{
     background-image: url('images/tail.png');
 }
+.right{
+    transform: rotateZ(90deg);
+}
+.down{
+    transform: rotateZ(180deg);
+}
+.left{
+    transform: rotateZ(-90deg);
+}
 .food{
     background-image: url('images/food.png');
 }

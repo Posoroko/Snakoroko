@@ -46,10 +46,11 @@ function popUp(element, action) {
 let array484 = [];
 let boardBluePrint = [];
 let actionBluePrint = [];
-let movement = 1;       // up = 1, right = 2, down = 3, left = 4
+let movement = 'up';       
 let gameStarted = false;
 let gameIsOver = false;
 let eatFood = true;
+let speed = 200;
 
 // gallery of objects
 let foodLocation;
@@ -87,7 +88,7 @@ let createBoardBluePrint = () => {
 //render objects with an object
 //snake has 2 elements: position and movement
 let objects = {
-    snake: [230, 252, 274],
+    snake: [[230, 'up'], [252, 'up'], [274, 'up']],
     food: undefined,
 }
 //verify if tile is wall. Return true if index is a wall, false if it's not
@@ -101,7 +102,7 @@ function checkIfWall(index) {
 // check if index is on snake
 function checkIfSnake(index) {
     for(let i = 0; i < objects.snake.length; i++) {
-        if(index == objects.snake[i]) {
+        if(index == objects.snake[i][0]) {
             return true;
         } else {
             return false;
@@ -113,7 +114,6 @@ function checkIfSnake(index) {
 function placeFood() {
     do{
         objects.food = Math.floor(Math.random() * (460 - 23)) + 23;
-        console.log('food = ' + objects.food);
       } while(checkIfWall(objects.food));
     if (checkIfSnake(objects.food)) {
         placeFood();
@@ -129,17 +129,19 @@ function createActionBluePrint() {
     let arr = createBoardBluePrint();
     if(eatFood === true){
         placeFood();
+        speed -= 5;
         eatFood = false;
+
     }
     arr[objects.food] = food;
     //render snake
     for(let i = 0; i < objects.snake.length; i++){
         if(i === 0) {
-            arr[objects.snake[i]] = head;
+            arr[objects.snake[i][0]] = [head, objects.snake[i][1]];
         } else if (i === objects.snake.length - 1) {
-            arr[objects.snake[i]] = tail;
+            arr[objects.snake[i][0]] = [tail, objects.snake[i][1]];
         } else {
-            arr[objects.snake[i]] = body;
+            arr[objects.snake[i][0]] = [body, objects.snake[i][1]];
         }
     }
     return arr;
@@ -149,31 +151,30 @@ function createActionBluePrint() {
 
 let exportToDom = (actionBluePrint) => {
     for(let i = 0; i < 484; i++) {
+        let newClass;
+        let newSnakeClass;
         if(checkIfWall(i)){
-            let newDiv = document.createElement('div');
-            newDiv.classList.add('wall', 'tile');
-            gameBoard_div.appendChild(newDiv);
-        } else if(actionBluePrint[i] == head) {
-            let newDiv = document.createElement('div');
-            newDiv.classList.add('head', 'tile');
-            gameBoard_div.appendChild(newDiv);
-        } else if(actionBluePrint[i] == body) {
-            let newDiv = document.createElement('div');
-            newDiv.classList.add('body', 'tile');
-            gameBoard_div.appendChild(newDiv);
-        } else if(actionBluePrint[i] == tail) {
-            let newDiv = document.createElement('div');
-            newDiv.classList.add('tail', 'tile');
-            gameBoard_div.appendChild(newDiv);
+            newClass = 'wall';
+        } else if(actionBluePrint[i][0] == head) {
+            newClass = 'head' ;
+            newSnakeClass = actionBluePrint[i][1];
+        } else if(actionBluePrint[i][0] == body) {
+            newClass = 'body' ;
+            newSnakeClass = actionBluePrint[i][1];
+        } else if(actionBluePrint[i][0] == tail) {
+            newClass = 'tail' ;
+            newSnakeClass = actionBluePrint[i][1];
         } else if( actionBluePrint[i] == food ) {
-            let newDiv = document.createElement('div');
-            newDiv.classList.add('food', 'tile');
-            gameBoard_div.appendChild(newDiv);
+            newClass = 'food';
         } else {
-            let newDiv = document.createElement('div');
-            newDiv.classList.add('empty', 'tile');
-            gameBoard_div.appendChild(newDiv);
+            newClass = 'empty';
         }
+        let newDiv = document.createElement('div');
+            newDiv.classList.add(newClass, 'tile');
+            if(newClass === 'head' || newClass === 'body' || newClass === 'tail') {
+                newDiv.classList.add(newSnakeClass);
+            }
+            gameBoard_div.appendChild(newDiv);
     }
 }
 
@@ -194,13 +195,13 @@ function gameOver() {
 document.addEventListener('keydown', event => {
     if(gameIsOver === false) {
         if (event.key === "ArrowUp") {
-            movement = 1;
+            movement = 'up';
         } else if (event.key === "ArrowDown") {
-            movement = 3;
+            movement = 'down';
         } else if (event.key === "ArrowRight") {
-            movement = 2;
+            movement = 'right';
         } else if (event.key === "ArrowLeft") {
-            movement = 4;
+            movement = 'left';
         }
     }
 
@@ -219,37 +220,39 @@ function checkIfGameOver(newTile) {
   //update the snake array: activated by user or by setInterval(). 
   //move receives arrow key or movement variable
 function updateSnake() {
-    console.log('start of snake update: ' + objects.snake[0]);
-    let newTile;
+    let newTile = [undefined, undefined];
     //snake going up
-    if(movement === 1) {
-        newTile = objects.snake[0] - 22;
-        console.log('new tile going up ' + newTile);
+    if(movement === 'up') {
+        newTile[0] = objects.snake[0][0] - 22;
     }
     //snake going right
-    else if(movement === 2) {
-        newTile = objects.snake[0] + 1;
-        console.log('new tile going right ' + newTile);
+    else if(movement === 'right') {
+        newTile[0] = objects.snake[0][0] + 1;
     }
     //snake going down
-    else if(movement === 3){
-        newTile = objects.snake[0] + 22;
-        console.log('new tile going down ' + newTile);
+    else if(movement === 'down'){
+        newTile[0] = objects.snake[0][0] + 22;
     }
     //snake going left
-    else if(movement === 4) {
-        newTile = objects.snake[0] - 1;
-        console.log('new tile going left ' + newTile);
+    else if(movement === 'left') {
+        newTile[0] = objects.snake[0][0] - 1;
     }
+    newTile[1] = movement;
+    
 
-    if(checkIfGameOver(newTile)) {
+    if(checkIfGameOver(newTile[0])) {
         gameOver();
         gameOnOff('off');
     } else {
 
         objects.snake.unshift(newTile);
-        objects.snake.pop();
-        console.log('end of snake update' + objects.snake[0]);
+        if(actionBluePrint[newTile[0]] != food) {
+            objects.snake.pop();
+        } else{
+            eatFood = true;
+        }
+        
+
     }
     
 }
@@ -261,7 +264,7 @@ function gameOnOff(e) {
     
     if(e === 'on') {
         renderNewFrame();
-        newFrameTimer = setInterval(renderNewFrame, 100);
+        newFrameTimer = setInterval(renderNewFrame, speed);
     } else if (e === 'off'){
         clearInterval(newFrameTimer);
     }
