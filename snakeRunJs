@@ -1,8 +1,14 @@
-var arr = [[1,2], [3,4], [5,6]]
-arr = arr.flat()
-console.log(arr)
+var eric = 'eric'
 
-if(arr.includes(5)){
-  
+function test() {
+  console()
+
+}
+function console() {
+  console.log('1')
+  console.log('2')
+  console.log('3')
+  console.log('4')
 }
 
+test()

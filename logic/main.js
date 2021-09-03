@@ -4,18 +4,17 @@ const popUpStart_div = document.getElementById('popUpStart');
 const popUpEnd_div = document.getElementById('popUpEnd');
 
 //Javascript variables
-let array484 = [];
+let array484;
 let boardBluePrint = [];
 let actionBluePrint = [];
 let movement = 'up';       
 let gameIsOn = false;
-let gameStarted = false;
 let gameIsOver = false;
 let eatFood = true;
 let speed = 300;
+let newFrameTimer; //setInterval pour la vitesse du snake
 
 // gallery of objects
-let foodLocation;
 const wall = 'wall';
 const empty = 'empty';
 const head = 'head';
@@ -57,7 +56,6 @@ function createActionBluePrint() {
     let arr = createBoardBluePrint();
     if(eatFood === true){
         placeFood();
-        speed -= 60;
         eatFood = false;
     }
     arr[objects.food] = food;
@@ -105,10 +103,7 @@ let exportToDom = (actionBluePrint) => {
     }
 }
 
-//create initial snake
-function initialiseSnake() {
-    return [[230, 'up'], [252, 'up'], [274, 'up']];
-}
+
 //place food
 function placeFood() {
     do{
@@ -120,36 +115,20 @@ function placeFood() {
         return
     }
 }
-// Listen for space bar and start game
-document.addEventListener('keyup', event => {
-    if (event.code === 'Space') {
-        if(gameIsOver === false && gameIsOn === false) {
-            popUp(popUpStart_div, 'hide');
 
-            gameOnOff('on');
-        } else if(gameIsOver === true ) {
-            popUp(popUpEnd_div, 'hide');
-            gameIsOver = false;
-            gameIsOn = false
-            clearBoard();
-            initialiseGame();
-        }
-
-    }
-  });
 
 
 //hide pop-ups
 function popUp(element, action) {
-    console.log('popup' + action);
+
     if(action === 'show') {
-        console.log(element + action + 'show');
+
         element.style.visibility = "visible";
-        console.log(element.style.visibility);
+
     } else if( action === 'hide') {
-        console.log(element + action + 'hide');
+
         element.style.visibility = "hidden";
-        console.log(element.style.visibility);
+
     }
     
 }
@@ -188,11 +167,7 @@ function checkIfSnake(index) {
 
 
 
-// game over, pop up, serpent disparait
-function gameOver() {
-    popUp(popUpEnd_div, 'show');
-    gameIsOver = true;
-}
+
 
 
 
@@ -250,8 +225,7 @@ function isTryingToGoBack(key) {
   //update the snake array: activated by user or by setInterval(). 
   //move receives arrow key or movement variable
 function updateSnake() {
-    
-        let newTile = [undefined, undefined];
+    let newTile = [undefined, undefined];
     //snake going up
     if(movement === 'up') {
         newTile[0] = objects.snake[0][0] - 22;
@@ -272,9 +246,8 @@ function updateSnake() {
     
 
     if(checkIfGameOver(newTile[0])) {
-        gameOver();
         gameOnOff('off');
-        gameIsOn = false;
+        
     } else {
 
         objects.snake.unshift(newTile);
@@ -292,47 +265,64 @@ function updateSnake() {
 }
 
 // start game, make the snake move
-let newFrameTimer;
+
 
 function gameOnOff(e) {
-    
     if(e === 'on') {
         gameIsOn = true;
         renderNewFrame();
         newFrameTimer = setInterval(renderNewFrame, speed);
     } else if (e === 'off'){
+        gameIsOn = false;
+        gameIsOver = true;
         clearInterval(newFrameTimer);
+        popUp(popUpEnd_div, 'show');
     }
-    
     function renderNewFrame() {
-        updateSnake();
-        actionBluePrint = createActionBluePrint();
-        clearBoard();
-        exportToDom(actionBluePrint);
+            updateSnake();
+            actionBluePrint = createActionBluePrint();
+            clearBoard();
+            exportToDom(actionBluePrint);
+
+        
     }
 }
+// game over, pop up, serpent disparait
 
 
-
-
-
-
-
-
-
-
-
+// Listen for space bar and start game
+document.addEventListener('keyup', event => {
+    if (event.code === 'Space') {
+        if(!gameIsOver && !gameIsOn) {
+            popUp(popUpStart_div, 'hide');
+            gameOnOff('on');
+        } else if(gameIsOver) {
+            gameIsOver = false;
+            popUp(popUpEnd_div, 'hide');
+            clearBoard();
+            initialiseGame();
+        }
+    }
+  });
 
   //initializing game on page load. Empty board with pop up message
 function initialiseGame() {
     popUp(popUpStart_div, 'show')
     array484 = createArray484();
+    movement = 'up';
     objects.snake = [[230, 'up'], [252, 'up'], [274, 'up']];
+    console.log(objects.snake);
     boardBluePrint = createBoardBluePrint();
     exportToDom(boardBluePrint);
 }
 
-onload = initialiseGame();
+
+
+
+
+
+
+
 
 
 // clear board before rendering new frame
@@ -342,3 +332,4 @@ function clearBoard() {
     }
 }
 
+onload = initialiseGame();
