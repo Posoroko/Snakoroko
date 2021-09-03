@@ -3,54 +3,16 @@ const gameBoard_div = document.getElementById('gameBoard');
 const popUpStart_div = document.getElementById('popUpStart');
 const popUpEnd_div = document.getElementById('popUpEnd');
 
-
-// Listen for space bar and start game
-document.addEventListener('keyup', event => {
-    if (event.code === 'Space') {
-        if(gameIsOver === false) {
-            popUp(popUpStart_div, 'hide');
-            gameOnOff('on');
-        } else if(gameIsOver === true ) {
-            popUp(popUpEnd_div, 'hide');
-        }
-
-            
-            
-            
-
-            
-
-          
-            
-            
-    
-        
-    }
-  });
-//hide pop-ups
-function popUp(element, action) {
-    console.log('popup' + action);
-    if(action === 'show') {
-        console.log(element + action + 'show');
-        element.style.visibility = "visible";
-        console.log(element.style.visibility);
-    } else if( action === 'hide') {
-        console.log(element + action + 'hide');
-        element.style.visibility = "hidden";
-        console.log(element.style.visibility);
-    }
-    
-}
-
 //Javascript variables
 let array484 = [];
 let boardBluePrint = [];
 let actionBluePrint = [];
 let movement = 'up';       
+let gameIsOn = false;
 let gameStarted = false;
 let gameIsOver = false;
 let eatFood = true;
-let speed = 200;
+let speed = 300;
 
 // gallery of objects
 let foodLocation;
@@ -61,6 +23,12 @@ const body = 'body';
 const tail = 'tail';
 const food = 'food';
 
+//snake has 2 elements: position and movement
+let objects = {
+    snake: [],
+    food: undefined,
+}
+
 
 // create array of 484 elements
 const createArray484 = () => {
@@ -70,9 +38,7 @@ const createArray484 = () => {
     }
     return arr
 };
-
-
-//create boardBluePrint. return an array with infos for walls, empty, snake and food
+//create boardBluePrint. return an array with infos for walls and empty cells
 let createBoardBluePrint = () => {
     let arr = [];
     for(let i = 0; i < 484; i++ ){
@@ -85,53 +51,14 @@ let createBoardBluePrint = () => {
     return arr;
   }
 
-//render objects with an object
-//snake has 2 elements: position and movement
-let objects = {
-    snake: [[230, 'up'], [252, 'up'], [274, 'up']],
-    food: undefined,
-}
-//verify if tile is wall. Return true if index is a wall, false if it's not
-function checkIfWall(index) {
-    if(index < 22 || index > 460 || index % 22 === 0 || index % 22 === 21) {
-        return true
-    } else {
-        return false;
-    }
-}
-// check if index is on snake
-function checkIfSnake(index) {
-    for(let i = 0; i < objects.snake.length; i++) {
-        if(index == objects.snake[i][0]) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
-
-//place food and bombs at start
-function placeFood() {
-    do{
-        objects.food = Math.floor(Math.random() * (460 - 23)) + 23;
-      } while(checkIfWall(objects.food));
-    if (checkIfSnake(objects.food)) {
-        placeFood();
-    } else {
-        return
-    }
-}
-
-
-//function gameRenderingBluePrint
+  //return an array with walls, empty cells, snake and food
 function createActionBluePrint() {
     
     let arr = createBoardBluePrint();
     if(eatFood === true){
         placeFood();
-        speed -= 5;
+        speed -= 60;
         eatFood = false;
-
     }
     arr[objects.food] = food;
     //render snake
@@ -147,7 +74,7 @@ function createActionBluePrint() {
     return arr;
 }
 
-//export action to the DOM.
+//export actionBluePrint to the DOM.
 
 let exportToDom = (actionBluePrint) => {
     for(let i = 0; i < 484; i++) {
@@ -178,6 +105,88 @@ let exportToDom = (actionBluePrint) => {
     }
 }
 
+//create initial snake
+function initialiseSnake() {
+    return [[230, 'up'], [252, 'up'], [274, 'up']];
+}
+//place food
+function placeFood() {
+    do{
+        objects.food = Math.floor(Math.random() * (460 - 23)) + 23;
+      } while(checkIfWall(objects.food));
+    if (checkIfSnake(objects.food)) {
+        placeFood();
+    } else {
+        return
+    }
+}
+// Listen for space bar and start game
+document.addEventListener('keyup', event => {
+    if (event.code === 'Space') {
+        if(gameIsOver === false && gameIsOn === false) {
+            popUp(popUpStart_div, 'hide');
+
+            gameOnOff('on');
+        } else if(gameIsOver === true ) {
+            popUp(popUpEnd_div, 'hide');
+            gameIsOver = false;
+            gameIsOn = false
+            clearBoard();
+            initialiseGame();
+        }
+
+    }
+  });
+
+
+//hide pop-ups
+function popUp(element, action) {
+    console.log('popup' + action);
+    if(action === 'show') {
+        console.log(element + action + 'show');
+        element.style.visibility = "visible";
+        console.log(element.style.visibility);
+    } else if( action === 'hide') {
+        console.log(element + action + 'hide');
+        element.style.visibility = "hidden";
+        console.log(element.style.visibility);
+    }
+    
+}
+
+
+
+
+
+
+
+
+//verify if tile is wall. Return true if index is a wall, false if it's not
+function checkIfWall(index) {
+    if(index < 22 || index > 460 || index % 22 === 0 || index % 22 === 21) {
+        return true
+    } else {
+        return false;
+    }
+}
+// check if index is on snake
+function checkIfSnake(index) {
+
+    if(objects.snake.flat().includes(index)) {
+
+        return true
+    } else{
+ 
+        return false
+    }
+
+}
+
+
+
+
+
+
 
 // game over, pop up, serpent disparait
 function gameOver() {
@@ -192,15 +201,17 @@ function gameOver() {
     //up = event.key === "ArrowLeft"
     //right = event.key === "ArrowRight"
     //down = event.key === "ArrowDown"
+
+    
 document.addEventListener('keydown', event => {
     if(gameIsOver === false) {
-        if (event.key === "ArrowUp") {
-            movement = 'up';
-        } else if (event.key === "ArrowDown") {
+        if (event.key === "ArrowUp" && objects.snake[0][1] != 'down') {
+                movement = 'up';
+        } else if (event.key === "ArrowDown" && objects.snake[0][1] != 'up') {
             movement = 'down';
-        } else if (event.key === "ArrowRight") {
+        } else if (event.key === "ArrowRight" && objects.snake[0][1] != 'left') {
             movement = 'right';
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === "ArrowLeft" && objects.snake[0][1] != 'right') {
             movement = 'left';
         }
     }
@@ -212,7 +223,26 @@ function checkIfGameOver(newTile) {
     if(newTile < 22 || newTile > 460 || newTile % 22 === 0 || newTile % 22 === 21){
         return true;
     } else {
-        return false;
+        if(checkIfSnake(newTile)){
+            return true;
+        } else {
+            return false
+        }
+    }
+}
+
+//check if the user tries to go back (180deg not allowed)
+function isTryingToGoBack(key) {
+    if(key === 'down' && snake[0][1] === 'up') {
+        return true
+    } else if(key === 'up' && snake[0][1] === 'down') {
+        return true
+    } else if(key === 'right' && snake[0][1] === 'left') {
+        return true
+    } else if(key === 'left' && snake[0][1] === 'right') {
+        return true
+    } else {
+        return false
     }
 }
 
@@ -220,7 +250,8 @@ function checkIfGameOver(newTile) {
   //update the snake array: activated by user or by setInterval(). 
   //move receives arrow key or movement variable
 function updateSnake() {
-    let newTile = [undefined, undefined];
+    
+        let newTile = [undefined, undefined];
     //snake going up
     if(movement === 'up') {
         newTile[0] = objects.snake[0][0] - 22;
@@ -243,6 +274,7 @@ function updateSnake() {
     if(checkIfGameOver(newTile[0])) {
         gameOver();
         gameOnOff('off');
+        gameIsOn = false;
     } else {
 
         objects.snake.unshift(newTile);
@@ -255,14 +287,17 @@ function updateSnake() {
 
     }
     
+    
+    
 }
 
 // start game, make the snake move
 let newFrameTimer;
-let gameIsOn = false;
+
 function gameOnOff(e) {
     
     if(e === 'on') {
+        gameIsOn = true;
         renderNewFrame();
         newFrameTimer = setInterval(renderNewFrame, speed);
     } else if (e === 'off'){
@@ -290,12 +325,14 @@ function gameOnOff(e) {
 
   //initializing game on page load. Empty board with pop up message
 function initialiseGame() {
+    popUp(popUpStart_div, 'show')
     array484 = createArray484();
+    objects.snake = [[230, 'up'], [252, 'up'], [274, 'up']];
     boardBluePrint = createBoardBluePrint();
     exportToDom(boardBluePrint);
 }
 
-initialiseGame();
+onload = initialiseGame();
 
 
 // clear board before rendering new frame

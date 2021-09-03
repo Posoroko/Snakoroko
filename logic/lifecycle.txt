@@ -1,0 +1,12 @@
+create array of 484 elements
+
+create board blueprint of gameboard(walls and empty cells)
+
+export board to DOM
+
+start pop-up
+
+=> spacebar
+
+
+
