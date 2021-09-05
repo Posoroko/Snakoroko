@@ -66,6 +66,8 @@ body{
 
 }
 .popUp{
+    width: 40%;
+    padding: 5px;
     background-color: var(--dark);
     left: 50%;
     top: 50%;
@@ -81,7 +83,7 @@ body{
     visibility: hidden;
 }
 .message{
-    font-size: 3vw;
+    font-size: min(25px, 5vw);
     color: var(--light);
 }
 .tile{

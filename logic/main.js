@@ -13,7 +13,7 @@ let movement = 'up';
 let gameIsOn = false;
 let gameIsOver = false;
 let eatFood = true;
-let speed = 300;
+let speed = 100;
 let newFrameTimer; //setInterval pour la vitesse du snake
 let score = 0;
 let lives = 3;
