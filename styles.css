@@ -22,16 +22,18 @@ body{
     display: grid;
     place-items: center;
 }
+.mainScreen{
+    width: min(100%, 704px);
+}
 .topBoard{
     width: 100%;
-    height: 150px;
     display: grid;
     place-items: center;
-    border: 1px solid red;
+    border: 1px solid green;
 }
 .title{
     color: var(--lightMid);
-    font-size: 60px;
+    font-size: 4vw;
 }
 .scoreboard{
     width: 100%;
@@ -41,22 +43,27 @@ body{
 }
 .scoreBox{
     color: var(--lightMid);
-    font-size: 20px;
+    font-size: 2vw;
+}
+.livesBox{
+    width: 30%;
 }
 .lives{
-    width: 30px;
+    width: 15%;
     margin: 0px 5px;
 }
 .gameBoardBox{
+    width: 100%;
     background-color: var(--lightMid);
     display: grid;
     place-items: center;
 }
 .gameBoard{
-    width: 704px;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     position: relative;
+
 }
 .popUp{
     background-color: var(--dark);
@@ -74,10 +81,11 @@ body{
     visibility: hidden;
 }
 .message{
+    font-size: 3vw;
     color: var(--light);
 }
 .tile{
-    width: 32px;
+    width: 4.5454%; /*32px*/
     aspect-ratio: 1/1;
     background-size: cover;
 }
