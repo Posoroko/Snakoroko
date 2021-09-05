@@ -2,6 +2,8 @@
 const gameBoard_div = document.getElementById('gameBoard');
 const popUpStart_div = document.getElementById('popUpStart');
 const popUpEnd_div = document.getElementById('popUpEnd');
+const score_span = document.getElementById('score');
+const livesBox_div = document.getElementById('livesBox')
 
 //Javascript variables
 let array484;
@@ -13,6 +15,8 @@ let gameIsOver = false;
 let eatFood = true;
 let speed = 300;
 let newFrameTimer; //setInterval pour la vitesse du snake
+let score = 0;
+let lives = 3;
 
 // gallery of objects
 const wall = 'wall';
@@ -28,6 +32,29 @@ let objects = {
     food: undefined,
 }
 
+//update score on scoreboard.
+function updateScore(how) {
+    if(how === 1){
+        score++;
+        score_span.innerHTML = score;
+    } else if(how === 0){
+        score = 0;
+        score_span.innerHTML = score;
+    }
+}
+//show left over lives in the DOM
+function updateLives(num) {
+    for(let i = 0; i < num; i++) {
+        let vies = document.createElement('img');
+        vies.classList.add('lives');
+        vies.setAttribute("id", "lives");
+        vies.src = 'images/head.png'
+        livesBox_div.appendChild(vies);
+        console.log(vies);
+    }
+    
+    
+}
 
 // create array of 484 elements
 const createArray484 = () => {
@@ -57,6 +84,7 @@ function createActionBluePrint() {
     if(eatFood === true){
         placeFood();
         eatFood = false;
+        updateScore(1);
     }
     arr[objects.food] = food;
     //render snake
@@ -308,6 +336,8 @@ document.addEventListener('keyup', event => {
   //initializing game on page load. Empty board with pop up message
 function initialiseGame() {
     popUp(popUpStart_div, 'show')
+    updateScore(0);
+    updateLives(lives);
     array484 = createArray484();
     movement = 'up';
     objects.snake = [[230, 'up'], [252, 'up'], [274, 'up']];
@@ -333,3 +363,5 @@ function clearBoard() {
 }
 
 onload = initialiseGame();
+
+//https://github.com/Posoroko/Snakoroko

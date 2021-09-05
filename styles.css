@@ -15,7 +15,6 @@
     --dark: #263423;
 }
 body{
-
     max-width: 100vw;
     height: 100vh;
     padding: 3vh;
@@ -24,7 +23,29 @@ body{
     place-items: center;
 }
 .topBoard{
-
+    width: 100%;
+    height: 150px;
+    display: grid;
+    place-items: center;
+    border: 1px solid red;
+}
+.title{
+    color: var(--lightMid);
+    font-size: 60px;
+}
+.scoreboard{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.scoreBox{
+    color: var(--lightMid);
+    font-size: 20px;
+}
+.lives{
+    width: 30px;
+    margin: 0px 5px;
 }
 .gameBoardBox{
     background-color: var(--lightMid);
