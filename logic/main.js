@@ -4,6 +4,8 @@ const popUpStart_div = document.getElementById('popUpStart');
 const popUpEnd_div = document.getElementById('popUpEnd');
 const score_span = document.getElementById('score');
 const livesBox_div = document.getElementById('livesBox')
+const title_h1 = document.getElementById('title');
+const topBar_div = document.getElementById('topBar');
 
 //Javascript variables
 let array484;
@@ -337,7 +339,6 @@ document.addEventListener('keyup', event => {
 function initialiseGame() {
     popUp(popUpStart_div, 'show')
     updateScore(0);
-    updateLives(lives);
     array484 = createArray484();
     movement = 'up';
     objects.snake = [[230, 'up'], [252, 'up'], [274, 'up']];
@@ -361,6 +362,31 @@ function clearBoard() {
         gameBoard_div.removeChild(gameBoard_div.lastElementChild);
     }
 }
+
+function largeurRedimentionnable(minSize,cible, parent, largeur){
+
+    let = fontSizeCount = minSize;
+
+function rechercheLargeur(cible, parent, largeur) {
+        cible.style.fontSize = fontSizeCount + 'px';
+        if(cible.offsetWidth < parent.offsetWidth * largeur)
+        {
+            fontSizeCount ++;
+            rechercheLargeur(cible, parent, largeur);
+        }
+        else
+        {
+            fontSizeCount = minSize;
+        }
+    }
+    rechercheLargeur(cible, parent, largeur);
+
+}
+window.addEventListener('resize', function(){
+    largeurRedimentionnable(20, title_h1, topBar_div, 0.6);
+});
+largeurRedimentionnable(20, title_h1, topBar_div , 0.6);
+
 
 onload = initialiseGame();
 

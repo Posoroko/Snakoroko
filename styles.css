@@ -29,13 +29,14 @@ body{
     width: 100%;
     display: grid;
     place-items: center;
-    border: 1px solid green;
+    border: 5px solid #587033;
 }
 .title{
     color: var(--lightMid);
-    font-size: 4vw;
+    padding: 5px;
 }
 .scoreboard{
+    padding: 5px;
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -43,7 +44,7 @@ body{
 }
 .scoreBox{
     color: var(--lightMid);
-    font-size: 2vw;
+    font-size: 16px;
 }
 .livesBox{
     width: 30%;
@@ -63,16 +64,17 @@ body{
     display: flex;
     flex-wrap: wrap;
     position: relative;
-
 }
 .popUp{
-    width: 40%;
+    width: 400px;
     padding: 5px;
     background-color: var(--dark);
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     position: absolute;
+    display: grid;
+    place-items: center;
 }
 #popUpStart{
     /*display: flex;*/
@@ -83,7 +85,7 @@ body{
     visibility: hidden;
 }
 .message{
-    font-size: min(25px, 5vw);
+    font-size: 16px;
     color: var(--light);
 }
 .tile{
