@@ -337,6 +337,7 @@ document.addEventListener('keyup', event => {
 
   //initializing game on page load. Empty board with pop up message
 function initialiseGame() {
+    
     popUp(popUpStart_div, 'show')
     updateScore(0);
     array484 = createArray484();
@@ -363,29 +364,29 @@ function clearBoard() {
     }
 }
 
-function largeurRedimentionnable(minSize,cible, parent, largeur){
+// function largeurRedimentionnable(minSize,cible, parent, largeur){
 
-    let = fontSizeCount = minSize;
+//     let = fontSizeCount = minSize;
 
-function rechercheLargeur(cible, parent, largeur) {
-        cible.style.fontSize = fontSizeCount + 'px';
-        if(cible.offsetWidth < parent.offsetWidth * largeur)
-        {
-            fontSizeCount ++;
-            rechercheLargeur(cible, parent, largeur);
-        }
-        else
-        {
-            fontSizeCount = minSize;
-        }
-    }
-    rechercheLargeur(cible, parent, largeur);
+//     function rechercheLargeur(cible, parent, largeur) {
+//         cible.style.fontSize = fontSizeCount + 'px';
+//         if(cible.offsetWidth < parent.offsetWidth * largeur)
+//         {
+//             fontSizeCount ++;
+//             rechercheLargeur(cible, parent, largeur);
+//         }
+//         else
+//         {
+//             fontSizeCount = minSize;
+//         }
+//     }
+//     rechercheLargeur(cible, parent, largeur);
 
-}
-window.addEventListener('resize', function(){
-    largeurRedimentionnable(20, title_h1, topBar_div, 0.6);
-});
-largeurRedimentionnable(20, title_h1, topBar_div , 0.6);
+// }
+// window.addEventListener('resize', function(){
+//     largeurRedimentionnable(20, title_h1, topBar_div, 0.6);
+// });
+// largeurRedimentionnable(20, title_h1, topBar_div , 0.6);
 
 
 onload = initialiseGame();
